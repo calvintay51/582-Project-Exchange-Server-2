@@ -53,7 +53,7 @@ def process_order(order):
                                           creator_id = best_match.id)
 
                 exchg1 = replacement_order.buy_amount / replacement_order.sell_amount
-                print("comp", exchg, exchg1)
+                # print("comp", exchg, exchg1)
                 session.add(replacement_order)
                 session.commit()
 
@@ -66,7 +66,7 @@ def process_order(order):
                                           receiver_pk= new_order.receiver_pk,sender_pk= new_order.sender_pk,
                                           creator_id=new_order.id)
                 exchg1 = replacement_order.buy_amount / replacement_order.sell_amount
-                print("comp1", exchg, exchg1)
+                # print("comp1", exchg, exchg1)
                 session.add(replacement_order)
                 session.commit()
 
