@@ -44,21 +44,29 @@ def process_order(order):
 
             replacement_order = None
             if best_match.sell_amount > new_order.buy_amount:
-                exchg = best_match.sell_amount / best_match.buy_amount
-                delta = best_match.sell_amount - new_order.buy_amount
+                exchg = best_match.buy_amount / best_match.sell_amount
+
                 replacement_order = Order(buy_currency=best_match.buy_currency, sell_currency=best_match.sell_currency,
-                                  buy_amount=best_match.buy_amount - delta / exchg, sell_amount=best_match.sell_amount - new_order.buy_amount,
-                                  receiver_pk= best_match.receiver_pk, sender_pk= best_match.sender_pk,
+                                          buy_amount=best_match.buy_amount - new_order.buy_amount * exchg,
+                                          sell_amount=best_match.sell_amount - new_order.buy_amount,
+                                          receiver_pk= best_match.receiver_pk, sender_pk= best_match.sender_pk,
                                           creator_id = best_match.id)
+
+                exchg1 = replacement_order.buy / replacement_order.sell_amount
+                print("comp", exchg, exchg1)
                 session.add(replacement_order)
                 session.commit()
+
             elif best_match.sell_amount < new_order.buy_amount:
-                exchg = new_order.sell_amount / new_order.buy_amount
-                delta = new_order.sell_amount - best_match.buy_amount
+                exchg = new_order.buy_amount / new_order.sell_amount
+
                 replacement_order = Order(buy_currency=new_order.buy_currency, sell_currency=new_order.sell_currency,
-                                  buy_amount=new_order.buy_amount - delta / exchg, sell_amount=new_order.sell_amount - best_match.buy_amount,
-                                  receiver_pk= new_order.receiver_pk,sender_pk= new_order.sender_pk,
+                                          buy_amount=new_order.buy_amount - best_match.sell_amount,
+                                          sell_amount=new_order.sell_amount - best_match.sell_amount / exchg,
+                                          receiver_pk= new_order.receiver_pk,sender_pk= new_order.sender_pk,
                                           creator_id=new_order.id)
+                exchg1 = replacement_order.buy_amount / replacement_order.sell_amount
+                print("comp1", exchg, exchg1)
                 session.add(replacement_order)
                 session.commit()
 
