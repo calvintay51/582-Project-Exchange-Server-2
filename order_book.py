@@ -39,12 +39,13 @@ def process_order(order):
             filled_time = datetime.now()
             best_match.filled = filled_time
             new_order.filled = filled_time
-            best_match.counterparty_id = new_order.counterparty_id
-            new_order.counterparty_id = best_match.counterparty_id
+            best_match.counterparty_id = new_order.id
+            new_order.counterparty_id = best_match.id
 
             replacement_order = None
             if best_match.sell_amount > new_order.buy_amount:
                 exchg = best_match.sell_amount / best_match.buy_amount
+                delta = best_match.sell_amount - new_order.buy_amount
                 replacement_order = Order(buy_currency=best_match.buy_currency, sell_currency=best_match.sell_currency,
                                   buy_amount=best_match.buy_amount - new_order.buy_amount * exchg, sell_amount=best_match.sell_amount - new_order.buy_amount,
                                   receiver_pk= best_match.receiver_pk, sender_pk= best_match.sender_pk,
@@ -53,6 +54,7 @@ def process_order(order):
                 session.commit()
             elif best_match.sell_amount < new_order.buy_amount:
                 exchg = new_order.sell_amount / new_order.buy_amount
+                delta = new_order.sell_amount - best_match.buy_amount
                 replacement_order = Order(buy_currency=new_order.buy_currency, sell_currency=new_order.sell_currency,
                                   buy_amount=new_order.buy_amount - best_match.buy_amount * exchg, sell_amount=new_order.sell_amount - best_match.buy_amount,
                                   receiver_pk= new_order.receiver_pk,sender_pk= new_order.sender_pk,
