@@ -29,7 +29,7 @@ def process_order(order):
 
         matched_orders = session.query(Order).filter(Order.filled == None, Order.buy_currency == order["sell_currency"],
                                                  Order.sell_currency == order["buy_currency"],
-                                                 Order.sell_amount / Order.buy_amount <= order["buy_amount"] / order["sell_amount"]).all()
+                                                 Order.sell_amount / Order.buy_amount >= order["buy_amount"] / order["sell_amount"]).all()
 
         if len(matched_orders) == 0:
             break
