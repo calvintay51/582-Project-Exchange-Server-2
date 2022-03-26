@@ -25,9 +25,7 @@ def process_order(order):
 
 
     #search for a matching order
-    matched_orders = session.query(Order).filter(Order.filled == None, Order.buy_currency == new_order.sell_currency,
-                                Order.sell_currency == new_order.buy_currency,
-                                Order.sell_amount / Order.buy_amount <= new_order.buy_amount / new_order.buy_amount)
+    matched_orders = session.query(Order).filter(Order.filled == None, Order.buy_currency == new_order.sell_currency, Order.sell_currency == new_order.buy_currency, Order.sell_amount / Order.buy_amount <= new_order.buy_amount / new_order.buy_amount)
     #How to do  The buy / sell amounts need not match exactly and Each order should match at most one other
 
     session.query.order_by(session.total.desc()).all()
