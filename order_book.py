@@ -10,6 +10,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 def process_order(order):
+    # print(order)
     #Your code here
     # Order.buy_currency = order["buy_currency"]
     # Order.sell_currency = order["sell_currency"]
@@ -21,7 +22,7 @@ def process_order(order):
 
 
     remaining_buy = order["buy_amount"]
-    print(remaining_buy)
+    # print(remaining_buy)
 
     while remaining_buy != 0:
         session.query(Order).order_by(Order.sell_amount / Order.buy_amount).all()
@@ -33,7 +34,7 @@ def process_order(order):
         if len(matched_orders) == 0:
             break
         else:
-            print("traded")
+            # print("traded")
             best_match = matched_orders[-1]
             filled_time = datetime.now()
             best_match.filled = filled_time
@@ -63,12 +64,12 @@ def process_order(order):
             break
 
 
-    print("trade")
-    if len(matched_orders) >0:
-        # print(matched_orders[1])
-        # pass
-        for i in matched_orders:
-            print(i.sell_currency, i.sell_amount, i.buy_currency, i.buy_amount)
+    # print("trade")
+    # if len(matched_orders) >0:
+    #     # print(matched_orders[1])
+    #     # pass
+    #     for i in matched_orders:
+    #         print(i.sell_currency, i.sell_amount, i.buy_currency, i.buy_amount)
 
     #search for a matching order
     # matched_orders = session.query(Order).filter(Order.filled == None, Order.buy_currency.like(new_order.sell_currency)) #,\
